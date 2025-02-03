@@ -24,3 +24,30 @@ function loadUserSelect() {
     userSelect.appendChild(option);
   });
 }
+
+// Display agenda
+displayAgenda();
+
+function displayAgenda(agenda) {
+  agendaList.innerHTML = ''; // Clear previous agenda
+
+  if (!agenda || agenda.length === 0 || !userId) {
+    noAgendaMessage.style.display = 'block';
+    noAgendaMessage.innerText = "No agenda available."
+    return;
+  }
+
+  noAgendaMessage.style.display = 'none';
+
+  // Filter out past dates and sort by date
+  const currentDate = new Date();
+  const futureAgenda = agenda
+    .filter(item => new Date(item.date) >= currentDate)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  futureAgenda.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.topic} - ${new Date(item.date).toDateString()}`;
+    agendaList.appendChild(li);
+  });
+}
