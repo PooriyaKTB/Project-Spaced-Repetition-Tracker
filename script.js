@@ -9,6 +9,9 @@ const topicNameInput = document.getElementById('topic-name');
 const topicDateInput = document.getElementById('topic-date');
 const clearDataButton = document.getElementById('clear-data-button');
 
+// Set default date to today
+topicDateInput.valueAsDate = new Date();
+
 // Load users into dropdown
 loadUserSelect();
 
