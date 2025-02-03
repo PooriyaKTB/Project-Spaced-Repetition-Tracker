@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaced Repetition Tracker</title>
+</head>
+
+<body style="text-align: center;">
+    <header>
+        <h1>Spaced Repetition Tracker</h1>
+        <h2>CYF Piscine</h2>
+    </header>
+    <main>
+        <!-- User Selection Dropdown -->
+        <label for="user-select">Select User:</label>
+        <select id="user-select">
+            <option value="">-- Select a User --</option>
+        </select>
+
+        <!-- Agenda Display -->
+        <div id="agenda">
+            <h2>Agenda</h2>
+            <p id="no-agenda-message">No agenda available for this user.</p>
+            <ul id="agenda-list" style="list-style-type: none;"></ul>
+        </div>
+
+        <!-- Add Topic Form -->
+        <h2>Add New Topic</h2>
+        <form id="add-topic-form">
+            <label for="topic-name">Topic Name:</label>
+            <input type="text" id="topic-name" required>
+
+            <label for="topic-date">Start Date:</label>
+            <input type="date" id="topic-date" required>
+
+            <button type="submit">Add Topic</button>
+        </form>
+        <br>
+        <!-- Clear Data Button -->
+        <button id="clear-data-button" disabled>Clear Data</button>
+    </main>
+    <footer>
+        <h3>Team: PooriyaKTB & Ameneh-Keshavarz</h3>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
