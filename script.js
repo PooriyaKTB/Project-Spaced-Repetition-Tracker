@@ -25,15 +25,25 @@ function loadUserSelect() {
   });
 }
 
+userSelect.addEventListener('change', () => {
+  displayAgenda();
+});
+
 // Display agenda
 displayAgenda();
 
-function displayAgenda(agenda) {
+function displayAgenda() {
+  const userId = userSelect.value;
+  clearDataButton.disabled = !userId; 
+
+  if (!userId) return; 
+
+  const agenda = getData(userId);
   agendaList.innerHTML = ''; // Clear previous agenda
 
   if (!agenda || agenda.length === 0 || !userId) {
     noAgendaMessage.style.display = 'block';
-    noAgendaMessage.innerText = "No agenda available."
+    noAgendaMessage.innerText = `No agenda available for ${userId}.`
     return;
   }
 
@@ -42,7 +52,7 @@ function displayAgenda(agenda) {
   // Filter out past dates and sort by date
   const currentDate = new Date();
   const futureAgenda = agenda
-    .filter(item => new Date(item.date) >= currentDate)
+    .filter(item => new Date(item.date) >= normalizeDate(currentDate))
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   futureAgenda.forEach(item => {
@@ -51,3 +61,74 @@ function displayAgenda(agenda) {
     agendaList.appendChild(li);
   });
 }
+
+// Add new topic
+addTopicForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  addTopic();
+});
+
+function addTopic(){
+  const userId = userSelect.value;
+  const topicName = topicNameInput.value;
+  const startDate = new Date(topicDateInput.value);
+
+  if (!userId) {
+    alert("Please select a user first!");
+    return;
+  }
+  const spacedDates = calculateReviewDates(normalizeDate(startDate));
+  const newAgendaItems = spacedDates.map(date => ({
+    topic: topicName,
+    date: date, 
+  }));
+
+  console.log(newAgendaItems);
+  addData(userId, newAgendaItems);
+
+  displayAgenda();
+
+  // Reset form
+  topicNameInput.value = '';
+  topicDateInput.valueAsDate = new Date();
+
+}
+
+// Calculate spaced repetition dates
+function calculateReviewDates(date) {
+  if(date<normalizeDate(new Date))
+    return [
+      addWeeks(date, 1),
+      addMonths(date, 1),
+      addMonths(date, 3),
+      addMonths(date, 6),
+      addYears(date, 1)
+  ];
+  else 
+  return [
+    addWeeks(date, 1),
+    addMonths(date, 1),
+    addMonths(date, 3),
+    addMonths(date, 6),
+    addYears(date, 1)
+  ];
+}
+
+function addWeeks(date, weeks) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + weeks * 7);
+  return result;
+}
+
+function addMonths(date, months) {
+  const result = new Date(date);
+  result.setMonth(result.getMonth() + months);
+  return result;
+}
+
+function addYears(date, years) {
+  const result = new Date(date);
+  result.setFullYear(result.getFullYear() + years);
+  return result;
+}
+const normalizeDate = date => new Date(new Date(date).setHours(0, 0, 0, 0));
