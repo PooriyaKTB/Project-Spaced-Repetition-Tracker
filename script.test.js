@@ -30,4 +30,22 @@ describe("Date Utilities", () => {
     expect(normalized.getMinutes()).toBe(0);
     expect(normalized.getSeconds()).toBe(0);
   });
+  test("addWeeks should correctly add weeks", () => {
+    const date = new Date("2025-02-05");
+    const newDate = addWeeks(date, 2);
+    expect(newDate.getDate()).toBe(date.getDate() + 14);
+  });
+
+  test("addMonths should correctly add months", () => {
+    const date = new Date("2025-01-31");
+    const newDate = addMonths(date, 1);
+    expect(newDate.getMonth()).toBe(1); // February
+  });
+
+  test("addYears should correctly add years", () => {
+    const date = new Date("2025-02-05");
+    const newDate = addYears(date, 1);
+    expect(newDate.getFullYear()).toBe(2026);
+  });
+
 });
