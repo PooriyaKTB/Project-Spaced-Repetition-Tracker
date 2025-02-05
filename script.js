@@ -20,7 +20,7 @@ if (typeof document !== "undefined") {
   loadUserSelect();
 
   function loadUserSelect() {
-    const users = getUserIds(); // Get user IDs from storage.js
+    const users = getUserIds(); 
     if (!userSelect) return;
     users.forEach((userId) => {
       const option = document.createElement("option");
@@ -45,11 +45,11 @@ if (typeof document !== "undefined") {
     if (!userId) return; 
 
     const agenda = getData(userId);
-    agendaList.innerHTML = ''; // Clear previous agenda
+    agendaList.innerHTML = ''; 
 
     if (!agenda || agenda.length === 0 || !userId) {
       noAgendaMessage.style.display = 'block';
-      noAgendaMessage.innerText = `No agenda available for ${userId}.`;
+      noAgendaMessage.innerText = `No agenda available for user ${userId}.`;
       clearDataButton.disabled = 'none'; 
 
       return;
@@ -113,13 +113,37 @@ if (typeof document !== "undefined") {
     topicNameInput.value = '';
     topicDateInput.valueAsDate = new Date();
   }
+  
+  // Enable/Disable Clear Data Button based on user selection
+  userSelect.addEventListener('change', () => {
+    const userId = userSelect.value;
+  
+    if (!userId) return;
+  
+    const agenda = getData(userId);
+    displayAgenda(agenda);
+  });
+  
+  // Clear data for the selected user
+  clearDataButton.addEventListener('click', () => {
+    const userId = userSelect.value;
+    if (!userId) return;
+  
+    if (confirm("Are you sure you want to clear all data for this user?")) {
+      clearData(userId);
+      alert("Data cleared successfully!");
+      displayAgenda([]); 
+    }
+  });
 }
 
 export const normalizeDate = date => new Date(new Date(date).setHours(0, 0, 0, 0));
 
-// ✅ Calculate spaced repetition dates (this is testable)
+// Calculate spaced repetition dates (this is testable)
 export function calculateReviewDates(date) {
   date = normalizeDate(date); 
+
+  // --------------------------NO NEEDED ANYMORE-----------------------------------
   //const today = normalizeDate(new Date());
   //const weekReviewDate = normalizeDate(addWeeks(date,1));
 
@@ -150,6 +174,8 @@ export function calculateReviewDates(date) {
   //       addYears(date, 1),
   //     ];
   // }
+  // ----------------------------------------------------------------------------------
+
   return [
     addWeeks(date, 1),
     addMonths(date, 1),
