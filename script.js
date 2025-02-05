@@ -30,7 +30,7 @@ if (typeof document !== "undefined") {
     });
   }
 
-  userSelect?.addEventListener('change', () => {
+  userSelect.addEventListener('change', () => {
     displayAgenda();
   });
 
@@ -66,7 +66,6 @@ if (typeof document !== "undefined") {
     if(futureAgenda.length===0){
       noAgendaMessage.innerText = `No agenda available for user ${userId}.`;
       noAgendaMessage.style.display= 'block';
-
     }
 
     futureAgenda.forEach(item => {
@@ -77,7 +76,7 @@ if (typeof document !== "undefined") {
   }
 
   // Add new topic
-  addTopicForm?.addEventListener('submit', (e) => {
+  addTopicForm.addEventListener('submit', (e) => {
     e.preventDefault();
     addTopic();
   });
@@ -115,9 +114,13 @@ if (typeof document !== "undefined") {
   }
 }
 
-export const normalizeDate = date => new Date(new Date(date).setHours(0, 0, 0, 0));
+//export const normalizeDate = date => new Date(new Date(date).setHours(0, 0, 0, 0));
+export const normalizeDate = (date) => {
+  const d = new Date(date);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+};
 
-// ✅ Calculate spaced repetition dates (this is testable)
+//Calculate spaced repetition dates (this is testable)
 export function calculateReviewDates(date) {
   date = normalizeDate(date); 
   //const today = normalizeDate(new Date());
@@ -176,7 +179,6 @@ export function addMonths(date, months) {
 
   return newDate;
 }
-
 
 export function addYears(date, years) {
   const result = new Date(date);
