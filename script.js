@@ -196,17 +196,27 @@ export function addWeeks(date, weeks) {
 }
 
 export function addMonths(date, months) {
+  // const newDate = new Date(date);
+  // newDate.setMonth(newDate.getMonth() + months);
+
+  // // If the month rolls over incorrectly (i.e., fewer days exist), adjust to the last day of the month
+  // while (newDate.getMonth() !== (date.getMonth() + months) % 12) {
+  //   newDate.setDate(newDate.getDate() - 1);
+  // }
+
+  // return newDate;
+  
   const newDate = new Date(date);
-  newDate.setMonth(newDate.getMonth() + months);
+    const day = newDate.getDate();
 
-  // If the month rolls over incorrectly (i.e., fewer days exist), adjust to the last day of the month
-  while (newDate.getMonth() !== (date.getMonth() + months) % 12) {
-    newDate.setDate(newDate.getDate() - 1);
-  }
+    newDate.setDate(1);
+    newDate.setMonth(newDate.getMonth() + months);
 
-  return newDate;
+    const lastDayOfMonth = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0).getDate();
+    newDate.setDate(Math.min(day, lastDayOfMonth));
+    
+    return newDate;
 }
-
 
 export function addYears(date, years) {
   const result = new Date(date);
