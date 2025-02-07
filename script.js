@@ -71,9 +71,28 @@ if (typeof document !== "undefined") {
 
     futureAgenda.forEach(item => {
       const li = document.createElement('li');
-      li.textContent = `${item.topic} - ${new Date(item.date).toDateString()}`;
+      li.textContent = `${item.topic} - ${formatDate(new Date(item.date))}`;
       agendaList.appendChild(li);
     });
+  }
+
+  function formatDate(date) {
+      const month = date.toLocaleString('en-US', { month: 'short' });
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const suffix = getOrdinalSuffix(day);
+      return `${month} ${day}${suffix} ${year}`;
+  }
+  function getOrdinalSuffix(day) {
+      if (day >= 11 && day <= 13) {
+          return 'th';
+      }
+      switch (day % 10) {
+          case 1: return 'st';
+          case 2: return 'nd';
+          case 3: return 'rd';
+          default: return 'th';
+      }
   }
 
   // Add new topic
@@ -136,8 +155,7 @@ if (typeof document !== "undefined") {
     }
   });
 }
-
-//export const normalizeDate = date => new Date(new Date(date).setHours(0, 0, 0, 0));
+// Remove time from date
 export const normalizeDate = (date) => {
   const d = new Date(date);
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -146,39 +164,6 @@ export const normalizeDate = (date) => {
 // Calculate spaced repetition dates (this is testable)
 export function calculateReviewDates(date) {
   date = normalizeDate(date); 
-
-  // --------------------------NO NEEDED ANYMORE-----------------------------------
-  //const today = normalizeDate(new Date());
-  //const weekReviewDate = normalizeDate(addWeeks(date,1));
-
-  // if (date < today) {
-    
-  //   if(today.getDate() === date.getDate()) {
-  //     return [
-  //       addMonths(date, 1),
-  //       addMonths(date, 3),
-  //       addMonths(date, 6),
-  //       addYears(date, 1),
-  //     ];
-  //   }
-  //   // if(today > weekReviewDate) {
-  //   //   return [
-  //   //     today,
-  //   //     addMonths(date, 1),
-  //   //     addMonths(date, 3),
-  //   //     addMonths(date, 6),
-  //   //     addYears(date, 1),
-  //   //   ];
-  //   // }
-  //   return [
-  //       today,
-  //       addMonths(date, 1),
-  //       addMonths(date, 3),
-  //       addMonths(date, 6),
-  //       addYears(date, 1),
-  //     ];
-  // }
-  // ----------------------------------------------------------------------------------
 
   return [
     addWeeks(date, 1),
@@ -196,17 +181,7 @@ export function addWeeks(date, weeks) {
 }
 
 export function addMonths(date, months) {
-  // const newDate = new Date(date);
-  // newDate.setMonth(newDate.getMonth() + months);
-
-  // // If the month rolls over incorrectly (i.e., fewer days exist), adjust to the last day of the month
-  // while (newDate.getMonth() !== (date.getMonth() + months) % 12) {
-  //   newDate.setDate(newDate.getDate() - 1);
-  // }
-
-  // return newDate;
-  
-  const newDate = new Date(date);
+    const newDate = new Date(date);
     const day = newDate.getDate();
 
     newDate.setDate(1);
